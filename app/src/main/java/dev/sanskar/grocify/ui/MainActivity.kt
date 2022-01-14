@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import dev.sanskar.grocify.R
 import dev.sanskar.grocify.data.db.GrocifyDatabase
+import dev.sanskar.grocify.data.db.RecordEntity
 import dev.sanskar.grocify.data.model.Record
 import dev.sanskar.grocify.data.network.ApiService
 import dev.sanskar.grocify.databinding.ActivityMainBinding
@@ -39,18 +40,26 @@ class MainActivity : AppCompatActivity() {
                 binding.progressBarLoadingPrices.visibility = View.GONE
             }
         }
+
+        binding.buttonSort.setOnClickListener {
+            model.sortByPriceAsc()
+        }
+
+        model.transformedRecords.observe(this) {
+            adapter.submitList(it)
+        }
     }
 }
 
-class PriceListAdapter : ListAdapter<Record, PriceListAdapter.ViewHolder>(DiffCallback()) {
+class PriceListAdapter : ListAdapter<RecordEntity, PriceListAdapter.ViewHolder>(DiffCallback()) {
 
-    class DiffCallback : DiffUtil.ItemCallback<Record>() {
+    class DiffCallback : DiffUtil.ItemCallback<RecordEntity>() {
         // TODO Find better primary key
-        override fun areItemsTheSame(oldItem: Record, newItem: Record): Boolean {
+        override fun areItemsTheSame(oldItem: RecordEntity, newItem: RecordEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Record, newItem: Record): Boolean {
+        override fun areContentsTheSame(oldItem: RecordEntity, newItem: RecordEntity): Boolean {
             return oldItem == newItem
         }
     }
@@ -66,9 +75,7 @@ class PriceListAdapter : ListAdapter<Record, PriceListAdapter.ViewHolder>(DiffCa
             val record = getItem(position)
             textViewLocation.text = "${record.market}, ${record.district}, ${record.state}"
             textVoewCommodity.text = record.commodity
-            textViewPrice.text = record.modal_price
+            textViewPrice.text = record.modal_price.toString()
         }
     }
-
-
 }

@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import dev.sanskar.grocify.data.model.Record
 
-@Database(entities = [Record::class], version = 2)
+@Database(entities = [RecordEntity::class], version = 3)
 abstract class GrocifyDatabase : RoomDatabase() {
     abstract fun recordDao(): RecordDao
 }
