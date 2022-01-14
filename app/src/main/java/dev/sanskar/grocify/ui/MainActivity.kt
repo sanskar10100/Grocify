@@ -27,6 +27,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = PriceListAdapter()
     private val model by viewModels<MainViewModel>()
+    private var filterEnabled = false
+    set(value) {
+        field = value
+        if (value) {
+            binding.buttonFilter.text = "Clear Filter"
+            binding.buttonSort.isEnabled = false
+        } else {
+            binding.buttonSort.isEnabled = true
+            binding.buttonFilter.text = "Filter"
+            adapter.submitList(model.records.value)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +59,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonFilter.setOnClickListener {
-            FilterParameterFragment().show(supportFragmentManager, "filter")
+            if (!filterEnabled) FilterParameterFragment().show(supportFragmentManager, "filter")
+            filterEnabled = false
         }
 
         supportFragmentManager.setFragmentResultListener("FILTER", this) { _, bundle ->
             val filterDistricts = bundle.getStringArrayList("DISTRICTS")
             log("Filtered Districts: $filterDistricts")
             model.filterByDistricts(filterDistricts)
+            filterEnabled = true
         }
 
         model.transformedRecords.observe(this) {
