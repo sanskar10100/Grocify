@@ -12,6 +12,7 @@ import dev.sanskar.grocify.data.model.Record
 import dev.sanskar.grocify.data.network.ApiService
 import dev.sanskar.grocify.log
 import kotlinx.coroutines.launch
+import java.util.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun sortByPriceAsc() {
@@ -25,6 +26,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getDistinctStates() {
         viewModelScope.launch {
             states.value = db.recordDao().getDistinctStates()
+        }
+    }
+
+    fun filterByDistricts(filterDistricts: ArrayList<String>?) {
+        viewModelScope.launch {
+            if (filterDistricts != null)
+                transformedRecords.value = db.recordDao().getFilteredRecordsByDistrict(filterDistricts)
         }
     }
 

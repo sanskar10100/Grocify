@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.setFragmentResultListener("FILTER", this) { _, bundle ->
             val filterDistricts = bundle.getStringArrayList("DISTRICTS")
             log("Filtered Districts: $filterDistricts")
+            model.filterByDistricts(filterDistricts)
         }
 
         model.transformedRecords.observe(this) {

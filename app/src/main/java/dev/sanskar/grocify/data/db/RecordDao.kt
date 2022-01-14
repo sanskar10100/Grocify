@@ -23,4 +23,7 @@ interface RecordDao {
 
     @Query("SELECT DISTINCT district FROM records WHERE state IN(:states)")
     suspend fun getDistrictsForState(states: List<String>): List<String>
+
+    @Query("SELECT * FROM records WHERE district IN(:districts)")
+    suspend fun getFilteredRecordsByDistrict(districts: List<String>): List<RecordEntity>
 }
