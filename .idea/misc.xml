@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_baseline_keyboard_double_arrow_right_24.xml" value="0.365625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3328125" />
         <entry key="app/src/main/res/layout/fragment_filter_parameter.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_sort_query.xml" value="0.3494791666666667" />
