@@ -69,6 +69,7 @@ class FilterParameterFragment : BottomSheetDialogFragment() {
             binding.buttonToDistrict.visibility = View.GONE
             binding.chipGroupFilterDistricts.visibility = View.VISIBLE
             binding.buttonGenerateFilterResult.visibility = View.VISIBLE
+            binding.textViewFilterHint.text = "Please select one or more districts"
             it.forEach { district ->
                 val districtChip = layoutInflater.inflate(R.layout.layout_district_filter_chip, binding.chipGroupFilterDistricts, false) as Chip
                 districtChip.text = district
