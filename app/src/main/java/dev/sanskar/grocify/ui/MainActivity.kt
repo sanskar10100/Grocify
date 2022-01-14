@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private var sortAsc = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -55,7 +58,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonSort.setOnClickListener {
-            model.sortByPriceAsc()
+            binding.progressBarLoadingPrices.visibility = View.VISIBLE
+            sortAsc = !sortAsc
+            if (sortAsc) model.sortByPriceAsc() else model.sortByPriceDesc()
         }
 
         binding.buttonFilter.setOnClickListener {
@@ -64,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.setFragmentResultListener("FILTER", this) { _, bundle ->
+            binding.progressBarLoadingPrices.visibility = View.VISIBLE
             val filterDistricts = bundle.getStringArrayList("DISTRICTS")
             log("Filtered Districts: $filterDistricts")
             model.filterByDistricts(filterDistricts)
@@ -71,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         model.transformedRecords.observe(this) {
+            binding.progressBarLoadingPrices.visibility = View.GONE
             adapter.submitList(it)
         }
     }
@@ -79,7 +86,6 @@ class MainActivity : AppCompatActivity() {
 class PriceListAdapter : ListAdapter<RecordEntity, PriceListAdapter.ViewHolder>(DiffCallback()) {
 
     class DiffCallback : DiffUtil.ItemCallback<RecordEntity>() {
-        // TODO Find better primary key
         override fun areItemsTheSame(oldItem: RecordEntity, newItem: RecordEntity): Boolean {
             return oldItem.id == newItem.id
         }

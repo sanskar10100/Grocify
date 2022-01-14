@@ -18,6 +18,9 @@ interface RecordDao {
     @Query("SELECT * FROM records ORDER BY modal_price")
     suspend fun getRecordsSortedByPriceAsc(): List<RecordEntity>
 
+    @Query("SELECT * FROM records ORDER BY modal_price DESC")
+    suspend fun getRecordsSortedByPriceDesc(): List<RecordEntity>
+
     @Query("Select DISTINCT state FROM records")
     suspend fun getDistinctStates(): List<String>
 

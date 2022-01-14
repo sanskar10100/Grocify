@@ -23,16 +23,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val states = MutableLiveData<List<String>>()
 
-    fun getDistinctStates() {
-        viewModelScope.launch {
-            states.value = db.recordDao().getDistinctStates()
-        }
-    }
 
     fun filterByDistricts(filterDistricts: ArrayList<String>?) {
         viewModelScope.launch {
             if (filterDistricts != null)
                 transformedRecords.value = db.recordDao().getFilteredRecordsByDistrict(filterDistricts)
+        }
+    }
+
+    fun sortByPriceDesc() {
+        viewModelScope.launch {
+            transformedRecords.value = db.recordDao().getRecordsSortedByPriceDesc()
         }
     }
 
