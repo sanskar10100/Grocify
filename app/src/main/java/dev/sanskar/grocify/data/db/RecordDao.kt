@@ -17,4 +17,10 @@ interface RecordDao {
 
     @Query("SELECT * FROM records ORDER BY modal_price")
     suspend fun getRecordsSortedByPriceAsc(): List<RecordEntity>
+
+    @Query("Select DISTINCT state FROM records")
+    suspend fun getDistinctStates(): List<String>
+
+    @Query("SELECT DISTINCT district FROM records WHERE state IN(:states)")
+    suspend fun getDistrictsForState(states: List<String>): List<String>
 }

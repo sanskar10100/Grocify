@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3328125" />
+        <entry key="app/src/main/res/layout/fragment_filter_parameter.xml" value="0.3494791666666667" />
+        <entry key="app/src/main/res/layout/fragment_sort_query.xml" value="0.3494791666666667" />
+        <entry key="app/src/main/res/layout/layout_district_filter_chip.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_price_item.xml" value="0.3484375" />
       </map>
     </option>

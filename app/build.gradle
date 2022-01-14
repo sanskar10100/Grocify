@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.squareup.moshi:moshi:1.13.0'
     implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.4.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     def roomVersion = "2.4.1"
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -53,4 +54,5 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
 
     implementation("androidx.activity:activity-ktx:1.4.0")
+    implementation("androidx.fragment:fragment-ktx:1.4.0")
 }

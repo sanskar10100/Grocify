@@ -8,3 +8,7 @@ import dev.sanskar.grocify.data.model.Record
 abstract class GrocifyDatabase : RoomDatabase() {
     abstract fun recordDao(): RecordDao
 }
+
+object DBInstance {
+    lateinit var db: GrocifyDatabase
+}

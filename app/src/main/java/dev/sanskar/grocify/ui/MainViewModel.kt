@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import androidx.room.Room
 import dev.sanskar.grocify.asDatabaseEntity
+import dev.sanskar.grocify.data.db.DBInstance
 import dev.sanskar.grocify.data.db.GrocifyDatabase
 import dev.sanskar.grocify.data.db.RecordDao
 import dev.sanskar.grocify.data.db.RecordEntity
@@ -19,7 +20,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    val db = Room.databaseBuilder(application.applicationContext, GrocifyDatabase::class.java, "grocify-db")
+    val states = MutableLiveData<List<String>>()
+
+    fun getDistinctStates() {
+        viewModelScope.launch {
+            states.value = db.recordDao().getDistinctStates()
+        }
+    }
+
+    private val db = Room.databaseBuilder(application.applicationContext, GrocifyDatabase::class.java, "grocify-db")
     .allowMainThreadQueries()
     .fallbackToDestructiveMigration()
     .build()
@@ -28,9 +37,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val records = db.recordDao().getAllRecords()
 
     init {
+        DBInstance.db = db
         viewModelScope.launch {
             val records = ApiService.retrofitService.getRecords().run {
-                log("Recieved API Response: $this")
+                log("Received API Response: $this")
                 records
             }
             log("Network response received, sample: ${records.subList(0, 5)}")

@@ -19,6 +19,7 @@ import dev.sanskar.grocify.data.network.ApiService
 import dev.sanskar.grocify.databinding.ActivityMainBinding
 import dev.sanskar.grocify.databinding.LayoutPriceItemBinding
 import dev.sanskar.grocify.log
+import dev.sanskar.grocify.ui.filter.FilterParameterFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -43,6 +44,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonSort.setOnClickListener {
             model.sortByPriceAsc()
+        }
+
+        binding.buttonFilter.setOnClickListener {
+            FilterParameterFragment().show(supportFragmentManager, "filter")
+        }
+
+        supportFragmentManager.setFragmentResultListener("FILTER", this) { _, bundle ->
+            val filterDistricts = bundle.getStringArrayList("DISTRICTS")
+            log("Filtered Districts: $filterDistricts")
         }
 
         model.transformedRecords.observe(this) {
