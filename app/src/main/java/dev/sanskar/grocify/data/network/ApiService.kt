@@ -18,7 +18,7 @@ val retrofit =
         .build()
 
 interface PriceApi {
-    @GET("9ef84268-d588-465a-a308-a864a43d0070?api-key=579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b&format=json&offset=0&limit=10")
+    @GET("9ef84268-d588-465a-a308-a864a43d0070?api-key=579b464db66ec23bdd000001b8fc29fa3b09486f4d9b26841e3c8941b&format=json&offset=0&limit=2000")
     suspend fun getRecords(): ApiResponse
 }
 

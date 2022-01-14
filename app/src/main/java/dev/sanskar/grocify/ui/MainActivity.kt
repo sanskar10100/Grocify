@@ -6,10 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import dev.sanskar.grocify.R
+import dev.sanskar.grocify.data.db.GrocifyDatabase
 import dev.sanskar.grocify.data.model.Record
 import dev.sanskar.grocify.data.network.ApiService
 import dev.sanskar.grocify.databinding.ActivityMainBinding
@@ -20,7 +23,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    val adapter = PriceListAdapter()
+    private val adapter = PriceListAdapter()
+    private val model by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +32,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.listPrices.adapter = adapter
 
-        GlobalScope.launch {
-            val records = ApiService.retrofitService.getRecords().records
-            runOnUiThread {
-                adapter.submitList(records)
+        model.records.observe(this) {
+            if (it.isNotEmpty()) {
+                log("Received data from room, sample: ${it.subList(0, 5)}")
+                adapter.submitList(it)
                 binding.progressBarLoadingPrices.visibility = View.GONE
             }
         }
@@ -41,10 +45,14 @@ class MainActivity : AppCompatActivity() {
 class PriceListAdapter : ListAdapter<Record, PriceListAdapter.ViewHolder>(DiffCallback()) {
 
     class DiffCallback : DiffUtil.ItemCallback<Record>() {
-        // Find better primary key
-        override fun areItemsTheSame(oldItem: Record, newItem: Record) = oldItem.market == newItem.market
+        // TODO Find better primary key
+        override fun areItemsTheSame(oldItem: Record, newItem: Record): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-        override fun areContentsTheSame(oldItem: Record, newItem: Record) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: Record, newItem: Record): Boolean {
+            return oldItem == newItem
+        }
     }
 
     class ViewHolder(val binding: LayoutPriceItemBinding) : RecyclerView.ViewHolder(binding.root)
