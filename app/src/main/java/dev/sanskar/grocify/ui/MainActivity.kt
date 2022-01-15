@@ -33,9 +33,11 @@ class MainActivity : AppCompatActivity() {
     set(value) {
         field = value
         if (value) {
+            // If filter is enabled, switch to filter view
             binding.buttonFilter.text = "Clear Filter"
             binding.buttonSort.isEnabled = false
         } else {
+            // When filter is cleared, resume to normal state
             binding.buttonSort.isEnabled = true
             binding.buttonFilter.text = "Filter"
             adapter.submitList(model.records.value)
@@ -63,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Clicking sort button again changes the order
         binding.buttonSort.setOnClickListener {
             binding.progressBarLoadingPrices.visibility = View.VISIBLE
             sortAsc = !sortAsc
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             filterEnabled = false
         }
 
+        // When result is received from filter fragment, update the list and enable filter view
         supportFragmentManager.setFragmentResultListener("FILTER", this) { _, bundle ->
             binding.progressBarLoadingPrices.visibility = View.VISIBLE
             val filterDistricts = bundle.getStringArrayList("DISTRICTS")
@@ -82,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             filterEnabled = true
         }
 
+        // Transformation could be the result of a sort or a filter op
         model.transformedRecords.observe(this) {
             binding.progressBarLoadingPrices.visibility = View.GONE
             adapter.submitList(it)
@@ -127,7 +132,7 @@ class PriceListAdapter(val context: Context) : ListAdapter<RecordEntity, PriceLi
                                 "Arrival Date: ${record.arrival_date}\n" +
                                 "Minimum Price: ₹${record.min_price}\n" +
                                 "Maximum Price: ₹${record.max_price}\n" +
-                                "Average Price: ₹${record.modal_price.toInt().toString()}"
+                                "Average Price: ₹${record.modal_price.toInt()}"
                     )
                     .show()
             }

@@ -9,6 +9,10 @@ import kotlinx.coroutines.launch
 class FilterViewModel : ViewModel() {
     private val db = DBInstance.db
     val states = MutableLiveData<List<String>>()
+
+    /**
+     * Fetch a list of all the distinct states from the db
+     */
     fun getDistinctStates() {
         viewModelScope.launch {
             states.value = db.recordDao().getDistinctStates()
@@ -18,6 +22,9 @@ class FilterViewModel : ViewModel() {
     var selectedStates = mutableListOf<String>()
     var selectedDistricts = mutableListOf<String>()
 
+    /**
+     * Fetch a list of all the districts for the selected states
+     */
     val districts = MutableLiveData<List<String>>()
     fun getDistricts() {
         viewModelScope.launch {

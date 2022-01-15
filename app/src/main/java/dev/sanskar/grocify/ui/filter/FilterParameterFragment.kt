@@ -23,7 +23,7 @@ class FilterParameterFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFilterParameterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,6 +34,7 @@ class FilterParameterFragment : BottomSheetDialogFragment() {
 
         log("Filter Dialog created")
         model.states.observe(viewLifecycleOwner) {
+            // When states are fetched from the database, chips are inflated so that the user can select them
             log("States count: ${it.size}")
             it.forEach { state ->
                 val stateChip = layoutInflater.inflate(R.layout.layout_district_filter_chip, binding.chipGroupFilter, false) as Chip
@@ -44,7 +45,7 @@ class FilterParameterFragment : BottomSheetDialogFragment() {
         model.getDistinctStates()
 
         binding.buttonToDistrict.setOnClickListener {
-            // Now we get the list of districts; find checked states
+            // Obtain a list of selected states
             model.selectedStates = binding.chipGroupFilter.children
                 .filter {
                     (it as Chip).isChecked
@@ -64,6 +65,7 @@ class FilterParameterFragment : BottomSheetDialogFragment() {
         }
 
         model.districts.observe(viewLifecycleOwner) {
+            // Get the list of districts that are in the filtered states
             log("Districts count: ${it.size}")
             binding.chipGroupFilter.visibility = View.GONE
             binding.buttonToDistrict.visibility = View.GONE
@@ -79,6 +81,7 @@ class FilterParameterFragment : BottomSheetDialogFragment() {
         }
 
         binding.buttonGenerateFilterResult.setOnClickListener {
+            // Generate the list of selected districts, and if valid, send the result
             model.selectedDistricts = binding.chipGroupFilterDistricts.children
                 .filter {
                     (it as Chip).isChecked

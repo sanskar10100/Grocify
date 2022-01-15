@@ -3,6 +3,9 @@ package dev.sanskar.grocify.data.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Separate db entity was created to properly hold the id and the modal_price
+ */
 @Entity(tableName = "records")
 data class RecordEntity(
     @PrimaryKey var id: Int = 0,
