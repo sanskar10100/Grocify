@@ -1,5 +1,6 @@
 package dev.sanskar.grocify.ui
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.sanskar.grocify.R
 import dev.sanskar.grocify.data.db.GrocifyDatabase
 import dev.sanskar.grocify.data.db.RecordEntity
@@ -25,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val adapter = PriceListAdapter()
+    private lateinit var adapter : PriceListAdapter
     private val model by viewModels<MainViewModel>()
     private var filterEnabled = false
     set(value) {
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        adapter = PriceListAdapter(this)
         binding.listPrices.adapter = adapter
 
         model.records.observe(this) {
@@ -86,7 +89,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class PriceListAdapter : ListAdapter<RecordEntity, PriceListAdapter.ViewHolder>(DiffCallback()) {
+// Didn't put it in a separate file since it's only being used in this activity
+class PriceListAdapter(val context: Context) : ListAdapter<RecordEntity, PriceListAdapter.ViewHolder>(DiffCallback()) {
 
     class DiffCallback : DiffUtil.ItemCallback<RecordEntity>() {
         override fun areItemsTheSame(oldItem: RecordEntity, newItem: RecordEntity): Boolean {
@@ -109,7 +113,24 @@ class PriceListAdapter : ListAdapter<RecordEntity, PriceListAdapter.ViewHolder>(
             val record = getItem(position)
             textViewLocation.text = "${record.market}, ${record.district}, ${record.state}"
             textVoewCommodity.text = record.commodity
-            textViewPrice.text = record.modal_price.toString()
+            textViewPrice.text = "₹" + record.modal_price.toInt().toString()
+
+            root.setOnClickListener {
+                MaterialAlertDialogBuilder(context)
+                    .setTitle("Commodity Details")
+                    .setMessage(
+                        "Market: ${record.market}\n" +
+                                "District: ${record.district}\n" +
+                                "State: ${record.state}\n" +
+                                "Commodity: ${record.commodity}\n" +
+                                "Variety: ${record.variety}\n" +
+                                "Arrival Date: ${record.arrival_date}\n" +
+                                "Minimum Price: ₹${record.min_price}\n" +
+                                "Maximum Price: ₹${record.max_price}\n" +
+                                "Average Price: ₹${record.modal_price.toInt().toString()}"
+                    )
+                    .show()
+            }
         }
     }
 }
