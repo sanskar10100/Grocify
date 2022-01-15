@@ -51,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         model.records.observe(this) {
             if (it.isNotEmpty()) {
+                // When data is retrieved, enable the function buttons
+                binding.buttonSort.isEnabled = true
+                binding.buttonFilter.isEnabled = true
                 log("Received data from room, sample: ${it.subList(0, 5)}")
                 adapter.submitList(it)
                 binding.progressBarLoadingPrices.visibility = View.GONE

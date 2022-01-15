@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toStartOf="@+id/button_filter"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/button_filter"
@@ -28,7 +29,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_sort"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:enabled="false"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_prices"
